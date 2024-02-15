@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moment Generating Function and Distribution Plot</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="plotting.js" defer></script>
+</head>
+<body>
+    <h1>Moment Generating Function and Distribution Plot</h1>
+    
+    <p>Enter the values for mean (μ), variance (σ<sup>2</sup>), and select the distribution:</p>
+    <label for="mean">Mean (μ):</label>
+    <input type="number" id="mean" step="any">
+    <br>
+    <label for="variance">Variance (σ<sup>2</sup>):</label>
+    <input type="number" id="variance" step="any">
+    <br>
+    <label for="distribution">Select Distribution:</label>
+    <select id="distribution">
+        <option value="normal">Normal Distribution</option>
+        <option value="t">t-Distribution</option>
+    </select>
+    <br>
+    <label for="xValue">Enter the value of x:</label>
+    <input type="number" id="xValue" step="any">
+    <br>
+    <button id="calculateButton">Calculate</button>
+    <br>
+    <div id="plotContainer">
+        <canvas id="mgfPlot" width="400" height="200"></canvas>
+        <canvas id="distributionPlot" width="400" height="200"></canvas>
+    </div>
+    <div id="result"></div>
+</body>
+</html>
