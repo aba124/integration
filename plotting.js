@@ -1,25 +1,19 @@
-// plotting.js
-
 document.addEventListener("DOMContentLoaded", function() {
-    // Function to calculate MGF for t-Distribution
     function calculateTDistributionMGF(degreesOfFreedom, t) {
         return Math.pow(1 - 2 * t / degreesOfFreedom, -degreesOfFreedom / 2);
     }
 
-    // Function to calculate MGF for Poisson Distribution
     function calculatePoissonMGF(mean, t) {
         return Math.exp(mean * (Math.exp(t) - 1));
     }
 
-    // Function to calculate MGF for Normal Distribution
     function calculateNormalMGF(mean, standardDeviation, t) {
         return Math.exp(mean * t + (Math.pow(standardDeviation, 2) * Math.pow(t, 2)) / 2);
     }
 
-// Function to calculate the moment for the given x-value
-function calculateMomentForX(distributionType, mean, standardDeviation, degreesOfFreedom, xValue) {
+function calculateMomentForX(distributionType, mean, standardDeviation, degreesOfFreedom, xValue, momentOrder) {
     var moment = 0;
-    var t = 0; // Evaluate MGF at t = 0
+    var t = 0; 
 
     if (distributionType === 'normal') {
         moment = calculateNormalMGF(mean, standardDeviation, t);
@@ -29,11 +23,12 @@ function calculateMomentForX(distributionType, mean, standardDeviation, degreesO
         moment = calculatePoissonMGF(mean, t);
     }
 
-    // Return the moment multiplied by the x-value
-    return moment * Math.pow(xValue, 1); // Modify the power as needed for different moments
+    moment *= Math.pow(xValue, momentOrder);
+
+    return moment;
 }
 
-// Function to plot MGF and distribution
+
 function plotDistributionAndMGF() {
     var mean = parseFloat(document.getElementById('mean').value);
     var standardDeviation = parseFloat(document.getElementById('standardDeviation').value);
@@ -94,7 +89,6 @@ function plotDistributionAndMGF() {
     }
     ctxMGF.stroke();
 
-    // Draw axes for MGF plot
     ctxMGF.beginPath();
     ctxMGF.strokeStyle = 'black';
     ctxMGF.moveTo(0, canvasMGF.height);
@@ -103,14 +97,12 @@ function plotDistributionAndMGF() {
     ctxMGF.lineTo(0, 0);
     ctxMGF.stroke();
 
-    // Label axes for MGF plot
     ctxMGF.font = '12px Arial';
     ctxMGF.fillStyle = 'black';
     ctxMGF.fillText('t', canvasMGF.width / 2, canvasMGF.height - 5);
     ctxMGF.fillText('MGF', 5, 10);
     ctxMGF.fillText(distributionLabel + ' (MGF)', canvasMGF.width / 2, 20);
 
-    // Plotting distribution curve
     var x, y, dx = 0.1;
     ctxDistribution.beginPath();
     ctxDistribution.strokeStyle = 'red';
@@ -136,7 +128,6 @@ function plotDistributionAndMGF() {
     }
     ctxDistribution.stroke();
 
-    // Draw axes for distribution plot
     ctxDistribution.beginPath();
     ctxDistribution.strokeStyle = 'black';
     ctxDistribution.moveTo(0, canvasDistribution.height);
@@ -145,7 +136,6 @@ function plotDistributionAndMGF() {
     ctxDistribution.lineTo(0, 0);
     ctxDistribution.stroke();
 
-    // Label axes for distribution plot
     ctxDistribution.font = '12px Arial';
     ctxDistribution.fillStyle = 'black';
     ctxDistribution.fillText('x', canvasDistribution.width / 2, canvasDistribution.height - 5);
@@ -153,12 +143,13 @@ function plotDistributionAndMGF() {
     ctxDistribution.fillText('Distribution Curve', canvasDistribution.width / 2, 20);
 
     var xValue = parseFloat(document.getElementById('xValue').value);
-    var momentResult = calculateMomentForX(distributionType, mean, standardDeviation, degreesOfFreedom, xValue);
-
-    // Display the moment result on the webpage
-    document.getElementById('momentResult').innerText = 'Moment for x = ' + xValue + ': ' + momentResult;
+    for (var momentOrder = 1; momentOrder <= 4; momentOrder++) {
+        var momentResult = calculateMomentForX(distributionType, mean, standardDeviation, degreesOfFreedom, xValue, momentOrder);
+        document.getElementById('momentResult' + momentOrder).innerText = 'Moment of order ' + momentOrder + ' for x = ' + xValue + ': ' + momentResult;
+    }
 
     if (distributionType === 't') {
+
         var pdf_values = [];
         var t_values_pdf = [];
         var dx_pdf = 0.1;
@@ -189,7 +180,6 @@ function plotDistributionAndMGF() {
     }
 }
 
-    // Factorial function
     function factorial(n) {
         if (n === 0 || n === 1)
             return 1;
@@ -199,7 +189,6 @@ function plotDistributionAndMGF() {
         return n;
     }
 
-    // Function to show/hide input boxes based on distribution type
     function handleDistributionTypeChange() {
         var distributionType = document.getElementById('distributionType').value;
         var standardDeviationBox = document.getElementById('standardDeviationBox');
@@ -207,7 +196,7 @@ function plotDistributionAndMGF() {
 
         if (distributionType === 'normal') {
             standardDeviationBox.style.display = 'block';
-            sampleSizeBox.style.display = 'none'; // Hide sample size box for normal distribution
+            sampleSizeBox.style.display = 'none'; 
         } else if (distributionType === 't') {
             standardDeviationBox.style.display = 'block';
             sampleSizeBox.style.display = 'block';
@@ -218,13 +207,10 @@ function plotDistributionAndMGF() {
     }
 
 
-    // Add event listener to the "Plot" button
     document.getElementById('plotButton').addEventListener('click', plotDistributionAndMGF);
 
-    // Add event listener to the distribution type dropdown
     document.getElementById('distributionType').addEventListener('change', handleDistributionTypeChange);
 
-    // Initially hide standard deviation and sample size boxes
     document.getElementById('standardDeviationBox').style.display = 'none';
     document.getElementById('sampleSizeBox').style.display = 'none';
 });
