@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moment Generating Function and Distribution Plot</title>
+    <title>Distribution Plotter</title>
     <link rel="stylesheet" href="styles.css">
     <script src="plotting.js" defer></script>
 </head>
 <body>
-    <h1>Moment Generating Function and Distribution Plot</h1>
+    <h1>Distribution Plotter</h1>
     
-    <p>Enter the values for mean (μ), variance (σ<sup>2</sup>), and select the distribution:</p>
-    <label for="mean">Mean (μ):</label>
-    <input type="number" id="mean" step="any">
-    <br>
-    <label for="variance">Variance (σ<sup>2</sup>):</label>
-    <input type="number" id="variance" step="any">
-    <br>
-    <label for="distribution">Select Distribution:</label>
-    <select id="distribution">
+    <label for="distributionType">Select Distribution Type:</label>
+    <select id="distributionType">
         <option value="normal">Normal Distribution</option>
         <option value="t">t-Distribution</option>
+        <option value="poisson">Poisson Distribution</option>
     </select>
     <br>
+    <div id="parameters">
+        <label for="mean">Mean (λ for Poisson):</label>
+        <input type="number" id="mean" step="any">
+        <br>
+        <div id="standardDeviationBox">
+            <label for="standardDeviation">Standard Deviation (only for Normal and t):</label>
+            <input type="number" id="standardDeviation" step="any">
+            <br>
+        </div>
+        <div id="sampleSizeBox">
+            <label for="sampleSize">Sample Size (only for t):</label>
+            <input type="number" id="sampleSize" step="any">
+            <br>
+        </div>
+    </div>
     <label for="xValue">Enter the value of x:</label>
     <input type="number" id="xValue" step="any">
     <br>
-    <button id="calculateButton">Calculate</button>
+    <button id="plotButton">Plot</button>
     <br>
-    <div id="plotContainer">
-        <canvas id="mgfPlot" width="400" height="200"></canvas>
-        <canvas id="distributionPlot" width="400" height="200"></canvas>
+    <div id="plots">
+        <canvas id="mgfPlot" width="400" height="300"></canvas>
+        <canvas id="distributionPlot" width="400" height="300"></canvas>
     </div>
-    <div id="result"></div>
+    <div id="momentResult"></div>
 </body>
 </html>
